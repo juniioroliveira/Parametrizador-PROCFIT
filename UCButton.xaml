@@ -1,0 +1,152 @@
+﻿<UserControl x:Class="Parametrizador_PROCFIT.UCButton"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Parametrizador_PROCFIT"
+             mc:Ignorable="d" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"  
+             x:Name="_this"
+             Width="auto"
+             Height="28"
+             Loaded="_this_Loaded">
+    <UserControl.Resources>
+
+        <Style x:Key="BorderButtonBlue" TargetType="{x:Type Border}">
+            <Setter 
+            Property="Width"
+            Value="auto"/>
+            <!--<Setter 
+            Property="MinHeight"
+            Value="28"/>-->
+            <Setter
+            Property="CornerRadius"
+            Value="{Binding CornerRadius, ElementName=_this}"/>
+            <Setter
+            Property="BorderThickness"
+            Value="0.5,0.5,0.5,1"/>
+            <Setter
+            Property="BorderBrush"
+            Value="{Binding BorderColor, ElementName=_this}"/>
+            <Setter
+            Property="Background"
+            Value="{Binding ButtonColor, ElementName=_this}"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Opacity" Value="0.85"/>
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Background" Value="Transparent"/>
+                    <Setter Property="BorderBrush" Value="DarkGray"/>
+                    <Setter Property="Cursor" Value="Arrow"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="myButton" TargetType="{x:Type Button}">
+            <!--<Setter
+                Property="Height"
+                Value="32"/>-->
+            <Setter 
+            Property="Width"
+            Value="auto"/>
+            <!--<Setter 
+            Property="MinHeight"
+            Value="25"/>-->
+            <Setter
+            Property="Margin"
+            Value="2,0"/>
+            <Setter
+            Property="Cursor"
+            Value="Hand"/>
+            <Setter
+                Property="IsEnabled"
+                Value="{Binding Enabled, ElementName=_this}"/>
+            <Setter
+            Property="Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Border
+                            Style="{StaticResource BorderButtonBlue}">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <!--Icone-->
+                                <Grid Style="{DynamicResource GridStyle1}" Grid.Column="0"
+                                        Visibility="{Binding IconVisibility, ElementName=_this}">
+
+                                    <materialDesign:PackIcon Kind="{Binding Icon, ElementName=_this}"
+                                            VerticalAlignment="Center"
+                                            Margin="5,0,-5,0"                                                          
+                                            Foreground="{Binding IconColor, ElementName=_this}"/>
+
+                                </Grid>
+
+
+                                <!--Texto-->
+                                <Grid Grid.Column="1"
+                                        Visibility="Visible">
+
+                                    <Label 
+                                        x:Name="buttonText"
+                                        Content="{Binding Text, ElementName=_this}"
+                                        FontFamily="{TemplateBinding FontFamily}"
+                                        FontSize="{Binding ButtonFontSize, ElementName=_this}"
+                                        FontWeight="{Binding ButtonFontStyle, ElementName=_this}"
+                                        Padding="0"
+                                        Margin="10 0 10 0"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Foreground="{Binding TextColor, ElementName=_this}">
+
+                                        <Label.Effect>
+                                            <DropShadowEffect
+                                                ShadowDepth="0.5"
+                                                Direction="360"
+                                                Color="Black"
+                                                Opacity="{Binding OpacityEfects, ElementName=_this}"
+                                                BlurRadius="1"/>
+                                        </Label.Effect>
+
+                                    </Label>
+                                </Grid>
+
+
+                                <!--Icone-->
+                                <Grid Grid.Column="2"
+                                    Visibility="{Binding ProgressVisibility, ElementName=_this}">
+
+                                    <ProgressBar Grid.Row="1"     
+                                        Style="{StaticResource MaterialDesignCircularProgressBar}"
+                                        Value="0"
+                                        Height="17"
+                                        Width="17"
+                                        Margin="-5,1,5,0"
+                                        IsIndeterminate="True"
+                                        Foreground="{Binding ProgressColor, ElementName=_this}"
+                                        HorizontalAlignment="Left"
+                                        VerticalAlignment="Center"
+                                        Visibility="Visible"/>
+                                </Grid>
+                            </Grid>
+                        </Border>
+                        <ControlTemplate.Triggers>
+
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+    </UserControl.Resources>
+    <Button
+        x:Name="button"
+        Style="{StaticResource myButton}" 
+        IsEnabledChanged="button_IsEnabledChanged" Cursor="Hand" />
+
+
+</UserControl>

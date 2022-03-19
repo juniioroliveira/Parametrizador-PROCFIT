@@ -1,0 +1,1397 @@
+﻿<Window x:Class="Parametrizador_PROCFIT.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"        
+        mc:Ignorable="d"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:control="clr-namespace:Parametrizador_PROCFIT"  
+        WindowStartupLocation="CenterScreen"   
+        WindowStyle="None"
+        Cursor="Arrow"
+        Title="CONFIG Parametros" Height="600" Width="460" MouseLeftButtonDown="Window_MouseLeftButtonDown" Loaded="Window_Loaded">
+    
+    <Window.Resources>
+        <SolidColorBrush x:Key="TabItem.Selected.Background" Color="#FFFFFF"/>
+        <SolidColorBrush x:Key="TabItem.Selected.Border" Color="#ACACAC"/>
+        <Style x:Key="TabControl" TargetType="{x:Type TabControl}">
+            <Setter Property="Padding" Value="2"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Background" Value="{StaticResource TabItem.Selected.Background}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource TabItem.Selected.Border}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type TabControl}">
+                        <Grid x:Name="templateRoot" ClipToBounds="true" SnapsToDevicePixels="true" KeyboardNavigation.TabNavigation="Local">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition x:Name="ColumnDefinition0"/>
+                                <ColumnDefinition x:Name="ColumnDefinition1" Width="0"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition x:Name="RowDefinition0" Height="Auto"/>
+                                <RowDefinition x:Name="RowDefinition1" Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Rectangle 
+                            Name="IndicadorBut" 
+                            HorizontalAlignment="Stretch" 
+                            VerticalAlignment="Bottom" 
+                            Fill="Gainsboro" 
+                            Height="2" 
+                            Margin="0"/>
+                            <TabPanel x:Name="headerPanel" Background="Transparent" Grid.Column="0" IsItemsHost="true" Margin="2,2,2,0" Grid.Row="0" KeyboardNavigation.TabIndex="1" Panel.ZIndex="1"/>
+                            <Border x:Name="contentPanel" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Grid.Column="0" KeyboardNavigation.DirectionalNavigation="Contained" Grid.Row="1" KeyboardNavigation.TabIndex="2" KeyboardNavigation.TabNavigation="Local">
+                                <ContentPresenter x:Name="PART_SelectedContentHost" ContentSource="SelectedContent" Margin="{TemplateBinding Padding}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                            </Border>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="TabStripPlacement" Value="Bottom">
+                                <Setter Property="Grid.Row" TargetName="headerPanel" Value="1"/>
+                                <Setter Property="Grid.Row" TargetName="contentPanel" Value="0"/>
+                                <Setter Property="Height" TargetName="RowDefinition0" Value="*"/>
+                                <Setter Property="Height" TargetName="RowDefinition1" Value="Auto"/>
+                                <Setter Property="Margin" TargetName="headerPanel" Value="2,0,2,2"/>
+                            </Trigger>
+                            <Trigger Property="TabStripPlacement" Value="Left">
+                                <Setter Property="Grid.Row" TargetName="headerPanel" Value="0"/>
+                                <Setter Property="Grid.Row" TargetName="contentPanel" Value="0"/>
+                                <Setter Property="Grid.Column" TargetName="headerPanel" Value="0"/>
+                                <Setter Property="Grid.Column" TargetName="contentPanel" Value="1"/>
+                                <Setter Property="Width" TargetName="ColumnDefinition0" Value="Auto"/>
+                                <Setter Property="Width" TargetName="ColumnDefinition1" Value="*"/>
+                                <Setter Property="Height" TargetName="RowDefinition0" Value="*"/>
+                                <Setter Property="Height" TargetName="RowDefinition1" Value="0"/>
+                                <Setter Property="Margin" TargetName="headerPanel" Value="2,2,0,2"/>
+                            </Trigger>
+                            <Trigger Property="TabStripPlacement" Value="Right">
+                                <Setter Property="Grid.Row" TargetName="headerPanel" Value="0"/>
+                                <Setter Property="Grid.Row" TargetName="contentPanel" Value="0"/>
+                                <Setter Property="Grid.Column" TargetName="headerPanel" Value="1"/>
+                                <Setter Property="Grid.Column" TargetName="contentPanel" Value="0"/>
+                                <Setter Property="Width" TargetName="ColumnDefinition0" Value="*"/>
+                                <Setter Property="Width" TargetName="ColumnDefinition1" Value="Auto"/>
+                                <Setter Property="Height" TargetName="RowDefinition0" Value="*"/>
+                                <Setter Property="Height" TargetName="RowDefinition1" Value="0"/>
+                                <Setter Property="Margin" TargetName="headerPanel" Value="0,2,2,2"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="TextElement.Foreground" TargetName="templateRoot" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0"
+            Background="#0067c0">
+
+            <Menu
+                Name="menu"
+                Width="45"
+                Padding="0"
+                Margin="0"
+                HorizontalAlignment="Left"
+                Background="#002241"
+                Foreground="White" MouseEnter="menu_MouseEnter">
+                <MenuItem>
+                    <MenuItem.Header>
+                        <materialDesign:PackIcon 
+                            Kind="Menu"
+                            Foreground="White"
+                            Width="20"
+                            Height="20"
+                            Margin="-5 0 -10 0"/>
+                    </MenuItem.Header>
+                    
+                    <MenuItem Header="Recarregar"
+                              Name="menuRecarregar"
+                              Click="menuRecarregar_Click"/>
+                    
+                    <MenuItem Header="Novo"
+                              Name="menuNovo"
+                              Click="menuNovo_Click"/>
+                    
+                    <MenuItem Header="Truncar Tabelas"
+                              Name="menuTruncate"
+                              Click="menuTruncate_Click"/>
+                    
+                    <MenuItem Header="Configurações"
+                              Name="menuConfiguracoes"
+                              Click="menuConfiguracoes_Click"/>
+                    
+                    <MenuItem Header="Logout"
+                              Name="menuLogout"
+                              Click="menuLogout_Click"/>
+                    
+                    <MenuItem Header="Sair"
+                              Name="menuSair"
+                              Click="menuSair_Click"/>
+                </MenuItem>
+            </Menu>
+            
+            <StackPanel 
+                Margin="50 10"
+                HorizontalAlignment="Left" 
+                VerticalAlignment="Center"
+                Orientation="Horizontal">
+                
+                <StackPanel Orientation="Vertical"
+                            Margin="10 0">
+                    <Label Content="SERVIDOR:"
+                        Foreground="LightGray"
+                        FontSize="10"
+                        Margin="0"
+                        Padding="0"/>
+                    <Label Content="--"
+                        Name="lServidorConectado"
+                        Foreground="White"
+                        FontWeight="Bold"
+                        FontSize="10"
+                        Margin="0"
+                        Padding="0"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Vertical"
+                            Margin="10 0">
+                    <Label Content="USUÁRIO:"
+                        Foreground="LightGray"
+                        FontSize="10"
+                        Margin="0"
+                        Padding="0"/>
+                    <Label Content="--"
+                        Name="lUsuarioConectado"
+                        Foreground="White"
+                        FontWeight="Bold"
+                        FontSize="10"
+                        Margin="0"
+                        Padding="0"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Vertical"
+                            Margin="10 0">
+                    <Label Content="BANCO:"
+                        Foreground="LightGray"
+                        FontSize="10"
+                        Margin="0"
+                        Padding="0"/>
+                    <Label Content="--"
+                        Name="lBancoConectado"
+                        Foreground="White"
+                        FontWeight="Bold"
+                        FontSize="10"
+                        Margin="0"
+                        Padding="0"/>
+                </StackPanel>
+
+
+
+            </StackPanel>
+        </Grid>
+
+        <Grid Grid.Row="1">
+            <TabControl
+                Grid.Row="0"
+                Name="tcUpdate"
+                BorderThickness="0"
+                Style="{StaticResource TabControl}">
+                
+                <TabItem Header="Login"
+                    FontSize="14"
+                    Visibility="Collapsed"
+                    Style="{StaticResource bsTabItem}">
+                    <StackPanel
+                        Width="180"
+                        Height="300"
+                        Margin="0 -30 0 0">
+                        <Label Content="Login"
+                           Padding="0"
+                           FontSize="25"/>
+                        <control:UCTextBoxRotulado
+                            x:Name="TServidor" 
+                            Rotulo="Servidor:"
+                            FontSizeRotulo="12"
+                            TextMask="None"
+                            WaterMark=".\SQLEXPRESS"
+                            VisibilityRotulo="visible"  
+                            FontSize="12"
+                            Width="180"
+                            Margin="0 3 0 0"
+                            Foreground="Black" />
+
+                        <control:UCTextBoxRotulado
+                            x:Name="tBanco" 
+                            Rotulo="Banco de Dados:"
+                            FontSizeRotulo="12"
+                            TextMask="None"
+                            WaterMark="ERPM"
+                            VisibilityRotulo="visible"  
+                            FontSize="12"
+                            Width="180"
+                            Margin="0 3 0 0"
+                            Foreground="Black" />
+
+                        <control:UCTextBoxRotulado
+                            x:Name="tUsuario" 
+                            Rotulo="Usuário:"
+                            FontSizeRotulo="12"
+                            TextMask="None"
+                            WaterMark="SA"
+                            VisibilityRotulo="visible"  
+                            FontSize="12"
+                            Width="180"
+                            Margin="0 3 0 0"
+                            Foreground="Black" />
+
+                        <control:UCTextBoxRotulado
+                            x:Name="tSenha" 
+                            Rotulo="Senha:"
+                            FontSizeRotulo="12"                            
+                            TextMask="None"
+                            WaterMark="••••"
+                            VisibilityRotulo="visible"  
+                            FontSize="12"
+                            Width="180"
+                            Margin="0 3 0 0"
+                            Foreground="Black" />
+
+                        <CheckBox 
+                            x:Name="checkBox1" 
+                            Content="Modo avançado"
+                            FontWeight="Regular"
+                            HorizontalAlignment="Center"
+                            Margin="0 3 0 5" 
+                            Click="checkBox1_Click"/>
+
+                        <control:UCButton
+                            x:Name="btnConectar"
+                            Text="Conectar"
+                            IsEnabled="True"
+                            Width="150"
+                            TextColor="White"
+                            BorderColor="Black"
+                            ButtonColor="#FF0067C0"
+                            Click="btnConectar_Click"/>
+
+                    </StackPanel>
+                </TabItem>
+
+                <TabItem Header="Propriedades"
+                    FontSize="14"
+                    Visibility="Collapsed"
+                    Style="{StaticResource bsTabItem}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="50"/>
+                        </Grid.RowDefinitions>
+
+                        <TabControl Grid.Row="0"
+                            Name="tcParametros"
+                            BorderThickness="0"
+                            Style="{StaticResource TabControl}">
+
+                            <TabItem Header="Principal"
+                                FontSize="14"
+                                Style="{StaticResource bsTabItem}" Cursor="Hand">
+                                
+                                <ScrollViewer>
+                                    <WrapPanel Width="350"
+                                        Margin="40 20 20 20">
+                                        <control:UCTextBoxRotulado
+                                            x:Name="tIpServidor" 
+                                            Rotulo="Servidor:"
+                                            FontSizeRotulo="12"
+                                            TextMask="None"
+                                            WaterMark="Ip ou Hostname"
+                                            VisibilityRotulo="visible"  
+                                            FontSize="12"
+                                            Width="155"
+                                            Margin="0 5 0 0"
+                                            Foreground="Black" LostFocus="tIpServidor_LostFocus" />
+
+                                        <control:UCButton
+                                            x:Name="btnSincronizar"
+                                            IconVisibility="Visible"
+                                            IconColor="White"
+                                            Icon="Sync"
+                                            IsEnabled="True"
+                                            Width="30"
+                                            Height="25"
+                                            Margin="-6 20 5 0"
+                                            TextColor="White"
+                                            BorderColor="Black"
+                                            ButtonColor="#FF0067C0" Click="btnSincronizar_Click"/>
+
+                                        <control:UCTextBoxRotulado
+                                            x:Name="tLoja" 
+                                            Rotulo="Loja:"
+                                            FontSizeRotulo="12"
+                                            TextMask="None"
+                                            WaterMark="00"
+                                            VisibilityRotulo="visible"  
+                                            FontSize="12"
+                                            Width="80"
+                                            Margin="0 5 5 0"
+                                            Foreground="Black" />
+
+                                        <control:UCTextBoxRotulado
+                                            x:Name="tEmpresa" 
+                                            Rotulo="Empresa:"
+                                            FontSizeRotulo="12"
+                                            TextMask="None"
+                                            WaterMark="00"
+                                            VisibilityRotulo="visible"  
+                                            FontSize="12"
+                                            Width="80"
+                                            Margin="0 5 0 0"
+                                            Foreground="Black" />
+
+                                        <control:UCTextBoxRotulado
+                                            x:Name="tInscFederal" 
+                                            Rotulo="Insc. Federal:"
+                                            FontSizeRotulo="12"
+                                            TextMask="None"
+                                            WaterMark="00.000.000/0000-00"
+                                            VisibilityRotulo="visible"  
+                                            FontSize="12"
+                                            Width="173"
+                                            Margin="0 5 5 0"
+                                            Foreground="Black" LostFocus="tInscFederal_LostFocus" />
+
+                                        <control:UCTextBoxRotulado
+                                            x:Name="tInscEstadual" 
+                                            Rotulo="Insc. Estadual:"
+                                            FontSizeRotulo="12"
+                                            TextMask="None"
+                                            WaterMark="00000000000000"
+                                            VisibilityRotulo="visible"  
+                                            FontSize="12"
+                                            Width="170"
+                                            Margin="0 5 0 0"
+                                            Foreground="Black" />
+
+                                        <control:UCTextBoxRotulado
+                                            x:Name="tRazSocial" 
+                                            Rotulo="Razão Social:"
+                                            FontSizeRotulo="12"
+                                            TextMask="None"
+                                            WaterMark="Razão social"
+                                            VisibilityRotulo="visible"  
+                                            FontSize="12"
+                                            Width="350"
+                                            Margin="0 5 0 0"
+                                            Foreground="Black" />
+
+                                        <control:UCTextBoxRotulado
+                                            x:Name="tCep" 
+                                            Rotulo="Cep:"
+                                            FontSizeRotulo="12"
+                                            TextMask="None"
+                                            WaterMark="00.000-000"
+                                            VisibilityRotulo="visible"  
+                                            FontSize="12"
+                                            Width="70"
+                                            Margin="0 5 5 0"
+                                            Foreground="Black" />
+
+                                        <control:UCTextBoxRotulado
+                                            x:Name="tLogradouro" 
+                                            Rotulo="Logradouro:"
+                                            FontSizeRotulo="12"
+                                            TextMask="None"
+                                            WaterMark="Rua, Av, Tv"
+                                            VisibilityRotulo="visible"  
+                                            FontSize="12"
+                                            Width="219"
+                                            Margin="0 5 5 0"
+                                            Foreground="Black" />
+
+                                        <control:UCTextBoxRotulado
+                                            x:Name="tNumero" 
+                                            Rotulo="N°:"
+                                            FontSizeRotulo="12"
+                                            TextMask="None"
+                                            WaterMark="00"
+                                            VisibilityRotulo="visible"  
+                                            FontSize="12"
+                                            Width="50"
+                                            Margin="0 5 0 0"
+                                            Foreground="Black" />
+
+                                        <control:UCTextBoxRotulado
+                                            x:Name="tComplemento" 
+                                            Rotulo="Complemento:"
+                                            FontSizeRotulo="12"
+                                            TextMask="None"
+                                            WaterMark="Loja, Apto, Sobrado"
+                                            VisibilityRotulo="visible"  
+                                            FontSize="12"
+                                            Width="100"
+                                            Margin="0 5 5 0"
+                                            Foreground="Black" />
+
+                                        <control:UCTextBoxRotulado
+                                            x:Name="tBairro" 
+                                            Rotulo="Bairro:"
+                                            FontSizeRotulo="12"
+                                            TextMask="None"
+                                            WaterMark="Bairro"
+                                            VisibilityRotulo="visible"  
+                                            FontSize="12"
+                                            Width="242"
+                                            Margin="0 5 0 0"
+                                            Foreground="Black" />
+
+                                        <control:UCTextBoxRotulado
+                                            x:Name="tCidade" 
+                                            Rotulo="Cidade:"
+                                            FontSizeRotulo="12"
+                                            TextMask="None"
+                                            WaterMark="Cidade"
+                                            VisibilityRotulo="visible"  
+                                            FontSize="12"
+                                            Width="273"
+                                            Margin="0 5 5 0"
+                                            Foreground="Black" />
+
+                                        <Grid Margin="0,5,0,2">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="auto"/>
+                                                <RowDefinition Height="auto"/>
+                                            </Grid.RowDefinitions>
+                                            <Label Grid.Row="0"
+                                                Content="UF:"
+                                                Padding="0"
+                                                Margin="0,0,0,2"
+                                                FontSize="12"
+                                                FontFamily="Arial"
+                                                FontWeight="Bold"
+                                                Foreground="Black"/>
+                                            <ComboBox Grid.Row="1"
+                                                Name="tUf" 
+                                                HorizontalAlignment="Left" 
+                                                Width="68" 
+                                                Foreground="Black" 
+                                                BorderThickness="0.5" 
+                                                Height="24" 
+                                                FontSize="12"
+                                                Padding="5,0">
+                                                <ComboBoxItem Content="AC"/>
+                                                <ComboBoxItem Content="AL"/>
+                                                <ComboBoxItem Content="AM"/>
+                                                <ComboBoxItem Content="AP"/>
+                                                <ComboBoxItem Content="BA"/>
+                                                <ComboBoxItem Content="CE"/>
+                                                <ComboBoxItem Content="DF"/>
+                                                <ComboBoxItem Content="ES"/>
+                                                <ComboBoxItem Content="GO"/>
+                                                <ComboBoxItem Content="MA"/>
+                                                <ComboBoxItem Content="MG"/>
+                                                <ComboBoxItem Content="MS"/>
+                                                <ComboBoxItem Content="MT"/>
+                                                <ComboBoxItem Content="PA"/>
+                                                <ComboBoxItem Content="PB"/>
+                                                <ComboBoxItem Content="PE"/>
+                                                <ComboBoxItem Content="PI"/>
+                                                <ComboBoxItem Content="PR"/>
+                                                <ComboBoxItem Content="RJ"/>
+                                                <ComboBoxItem Content="RN"/>
+                                                <ComboBoxItem Content="RO"/>
+                                                <ComboBoxItem Content="RR"/>
+                                                <ComboBoxItem Content="RS"/>
+                                                <ComboBoxItem Content="SC"/>
+                                                <ComboBoxItem Content="SE"/>
+                                                <ComboBoxItem Content="SP"/>
+                                                <ComboBoxItem Content="TO"/>
+                                            </ComboBox>
+                                        </Grid>
+
+                                        <control:UCTextBoxRotulado
+                                            x:Name="tTelefone" 
+                                            Rotulo="Telefone:"
+                                            FontSizeRotulo="12"
+                                            TextMask="None"
+                                            WaterMark="32798800"
+                                            VisibilityRotulo="visible"  
+                                            FontSize="12"
+                                            Width="350"
+                                            Margin="0 5 0 0"
+                                            Foreground="Black" />
+
+                                        <control:UCTextBoxRotulado
+                                            x:Name="tDicionario" 
+                                            Text="PBS_DROGALESTE_DICIONARIO"
+                                            IsEnabled="False"
+                                            Rotulo="Dicionário:"
+                                            FontSizeRotulo="12"
+                                            TextMask="None"
+                                            WaterMark="Ip ou Hostname"
+                                            VisibilityRotulo="visible"  
+                                            FontSize="12"
+                                            Width="350"
+                                            Margin="0 5 0 0"
+                                            Foreground="Black" />
+                                    </WrapPanel>
+                                </ScrollViewer>
+                            </TabItem>
+
+                            <TabItem Header="PBM"
+                                FontSize="14"
+                                Style="{StaticResource bsTabItem}" Cursor="Arrow">
+
+                                <ScrollViewer>
+                                    <WrapPanel Width="350"
+                                        Margin="40 15 20 0">
+
+                                        <GroupBox Margin="0 0 0 0" Padding="5">
+                                            <GroupBox.Header >
+                                                <CheckBox 
+                                                    x:Name="checkVidalink" 
+                                                    Content="Vidalink"
+                                                    FontWeight="Regular"
+                                                    FontSize="13"
+                                                    HorizontalAlignment="Left"
+                                                    Margin="0"
+                                                    IsChecked="True"
+                                                    Foreground="White"
+                                                    Background="White"  
+                                                    Cursor="Hand"
+                                                    Click="checkVidalink_Click"/>
+                                            </GroupBox.Header>
+                                            <GroupItem>
+                                                <StackPanel>
+                                                    <control:UCTextBoxRotulado
+                                                        x:Name="tIpVidalinkEnvio" 
+                                                        Rotulo="Ip Envio:"
+                                                        FontSizeRotulo="12"
+                                                        TextMask="None"
+                                                        WaterMark="000.000.000.000"
+                                                        VisibilityRotulo="visible"  
+                                                        FontSize="12"
+                                                        Width="325"
+                                                        Margin="5 5 5 0"
+                                                        Foreground="Black" />
+
+                                                    <control:UCTextBoxRotulado
+                                                        x:Name="tIpVidalinkResp" 
+                                                        Rotulo="Ip Resposta:"
+                                                        FontSizeRotulo="12"
+                                                        TextMask="None"
+                                                        WaterMark="000.000.000.000"
+                                                        VisibilityRotulo="visible"  
+                                                        FontSize="12"
+                                                        Width="325"
+                                                        Margin="5 3 5 5"
+                                                        Foreground="Black" />
+                                                </StackPanel>
+                                            </GroupItem>
+                                        </GroupBox>
+
+                                        <GroupBox Margin="0 5 0 0" Padding="5">
+                                            <GroupBox.Header>
+                                                <CheckBox 
+                                                    x:Name="checkEpharma" 
+                                                    Content="E-pharma"
+                                                    FontWeight="Regular"
+                                                    FontSize="13"
+                                                    IsChecked="True"
+                                                    HorizontalAlignment="Left"
+                                                    Margin="0"
+                                                    Cursor="Hand"
+                                                    Foreground="White"
+                                                    Background="White" Click="checkEpharma_Click" />
+                                            </GroupBox.Header>
+                                            <GroupItem>
+                                                <StackPanel>
+
+                                                    <control:UCTextBoxRotulado
+                                                        x:Name="tIpEpharmaEnvio" 
+                                                        Rotulo="Ip Envio:"
+                                                        FontSizeRotulo="12"
+                                                        TextMask="None"
+                                                        WaterMark="000.000.000.000"
+                                                        VisibilityRotulo="visible"  
+                                                        FontSize="12"
+                                                        Width="325"
+                                                        Margin="5 5 5 0"
+                                                        Foreground="Black" />
+
+                                                    <control:UCTextBoxRotulado
+                                                        x:Name="tIpEpharmaResp" 
+                                                        Rotulo="Ip Resposta:"
+                                                        FontSizeRotulo="12"
+                                                        TextMask="None"
+                                                        WaterMark="000.000.000.000"
+                                                        VisibilityRotulo="visible"  
+                                                        FontSize="12"
+                                                        Width="325"
+                                                        Margin="5 3 5 5"
+                                                        Foreground="Black" />
+                                                </StackPanel>
+                                            </GroupItem>
+                                        </GroupBox>
+
+                                        <GroupBox Margin="0 5 0 0" Padding="5">
+                                            <GroupBox.Header>
+                                                <CheckBox 
+                                                    x:Name="checkFuncional" 
+                                                    Content="Funcional Card"
+                                                    FontWeight="Regular"
+                                                    FontSize="13"
+                                                    HorizontalAlignment="Left"
+                                                    IsChecked="True"
+                                                    Margin="0"
+                                                    Cursor="Hand"
+                                                    Foreground="White"
+                                                    Background="White" Click="checkFuncional_Click" />
+                                            </GroupBox.Header>
+                                            <GroupItem>
+                                                <StackPanel>
+
+                                                    <control:UCTextBoxRotulado
+                                                        x:Name="tIpFuncionalEnvio" 
+                                                        Rotulo="Ip Envio:"
+                                                        FontSizeRotulo="12"
+                                                        TextMask="None"
+                                                        WaterMark="000.000.000.000"
+                                                        VisibilityRotulo="visible"  
+                                                        FontSize="12"
+                                                        Width="325"
+                                                        Margin="5 5 5 0"
+                                                        Foreground="Black" />
+
+                                                    <control:UCTextBoxRotulado
+                                                        x:Name="tIpFuncionalResp" 
+                                                        Rotulo="Ip Resposta:"
+                                                        FontSizeRotulo="12"
+                                                        TextMask="None"
+                                                        WaterMark="000.000.000"
+                                                        VisibilityRotulo="visible"  
+                                                        FontSize="12"
+                                                        Width="325"
+                                                        Margin="5 3 5 5"
+                                                        Foreground="Black" />
+                                                </StackPanel>
+                                            </GroupItem>
+                                        </GroupBox>
+                                    </WrapPanel>
+                                </ScrollViewer>
+
+
+                            </TabItem>
+
+                            <TabItem Header="Caixa"
+                                FontSize="14"
+                                Style="{StaticResource bsTabItem}">
+
+                                <ScrollViewer>
+                                    <WrapPanel Width="350"
+                                        Margin="40 20 20 20">
+
+                                        <control:UCTextBoxRotulado
+                                            x:Name="tCaixa" 
+                                            Rotulo="Caixa:"
+                                            FontSizeRotulo="12"
+                                            TextMask="None"
+                                            WaterMark="1,2,3"
+                                            VisibilityRotulo="visible"  
+                                            FontSize="12"
+                                            Width="350"
+                                            Margin="0 5 0 0"
+                                            Foreground="Black" LostFocus="tCaixa_LostFocus" />
+
+                                        <control:UCTextBoxRotulado
+                                            x:Name="tVersao" 
+                                            IsEnabled="False"
+                                            Rotulo="Versão:"
+                                            FontSizeRotulo="12"
+                                            TextMask="None"
+                                            WaterMark="0.0.0.0"
+                                            VisibilityRotulo="visible"  
+                                            FontSize="12"
+                                            Width="350"
+                                            Margin="0 5 0 0"
+                                            Foreground="Black" />
+
+                                        <control:UCTextBoxRotulado
+                                            x:Name="tSangria" 
+                                            IsEnabled="False"
+                                            Rotulo="Sangria:"
+                                            FontSizeRotulo="12"
+                                            TextMask="None"
+                                            WaterMark="123"
+                                            VisibilityRotulo="visible"  
+                                            FontSize="12"
+                                            Width="350"
+                                            Margin="0 5 0 0"
+                                            Foreground="Black" />
+
+                                        <control:UCTextBoxRotulado
+                                            x:Name="tEntrega" 
+                                            IsEnabled="False"
+                                            Rotulo="Taxa Entrega:"
+                                            FontSizeRotulo="12"
+                                            TextMask="None"
+                                            WaterMark="123"
+                                            VisibilityRotulo="visible"  
+                                            FontSize="12"
+                                            Width="350"
+                                            Margin="0 5 0 0"
+                                            Foreground="Black" />
+
+                                        <Grid Margin="0,5,0,2">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="auto"/>
+                                                <RowDefinition Height="auto"/>
+                                            </Grid.RowDefinitions>
+                                            <Label Grid.Row="0"
+                                                Content="Impressora:"
+                                                Padding="0"
+                                                Margin="0,0,0,2"
+                                                FontSize="12"
+                                                FontFamily="Arial"
+                                                FontWeight="Bold"
+                                                Foreground="Black"/>
+                                            <ComboBox Grid.Row="1"
+                                                Name="tImpressora" 
+                                                HorizontalAlignment="Left" 
+                                                Width="350" 
+                                                Foreground="Black" 
+                                                BorderThickness="0.5" 
+                                                Height="24" 
+                                                FontSize="12"
+                                                Padding="5,0">
+
+                                            </ComboBox>
+                                        </Grid>
+
+                                        <CheckBox 
+                                            x:Name="checkDebug" 
+                                            Content="Habilitar Debug"
+                                            FontWeight="Regular"
+                                            FontSize="13"
+                                            HorizontalAlignment="Left"
+                                            Margin="0 5 0 0"/>
+
+                                        <control:UCTextBoxRotulado
+                                            x:Name="tFiltroConsultaRomaneio" 
+                                            Rotulo="Filtro consulta romaneio:"
+                                            Text="T,E"
+                                            FontSizeRotulo="12"
+                                            TextMask="None"
+                                            WaterMark="T,E"
+                                            VisibilityRotulo="visible"  
+                                            FontSize="12"
+                                            Width="350"
+                                            Margin="0 5 0 0"
+                                            Foreground="Black" />
+
+                                    </WrapPanel>
+                                </ScrollViewer>
+
+                            </TabItem>
+
+                            <TabItem Header="Sitef"
+                                FontSize="14"
+                                Style="{StaticResource bsTabItem}">
+
+                                <ScrollViewer>
+                                    <WrapPanel Width="350"
+                                        Margin="40 20 20 20">
+
+                                        <control:UCTextBoxRotulado
+                                            x:Name="tLojaSitef" 
+                                            Rotulo="Loja Sitef:"
+                                            IsEnabled="False"
+                                            FontSizeRotulo="12"
+                                            TextMask="None"
+                                            WaterMark="1234"
+                                            VisibilityRotulo="visible"  
+                                            FontSize="12"
+                                            Width="350"
+                                            Margin="0 5 0 0"
+                                            Foreground="Black" />
+
+                                        <control:UCTextBoxRotulado
+                                            x:Name="tTerminalSitef" 
+                                            Rotulo="Terminal:"
+                                            IsEnabled="False"
+                                            FontSizeRotulo="12"
+                                            TextMask="None"
+                                            WaterMark="0000000"
+                                            VisibilityRotulo="visible"  
+                                            FontSize="12"
+                                            Width="350"
+                                            Margin="0 5 0 0"
+                                            Foreground="Black" 
+                                            LostFocus="tTerminalSitef_LostFocus" />
+
+                                    </WrapPanel>
+                                </ScrollViewer>
+
+                            </TabItem>
+
+                            <TabItem Header="Sat"
+                                FontSize="14"
+                                Style="{StaticResource bsTabItem}">
+
+                                <ScrollViewer>
+                                    <WrapPanel Width="350"
+                                        Margin="40 20 20 20">
+
+                                        <control:UCTextBoxRotulado
+                                            x:Name="tAtivacaoSat" 
+                                            Rotulo="Cod. Ativação:"
+                                            FontSizeRotulo="12"
+                                            TextMask="None"
+                                            WaterMark="00000000"
+                                            VisibilityRotulo="visible"  
+                                            FontSize="12"
+                                            Width="350"
+                                            Margin="0 5 0 0"
+                                            Foreground="Black" />
+
+                                        <control:UCTextBoxRotulado
+                                            x:Name="tDll" 
+                                            IsEnabled="False"
+                                            Rotulo="Sat dll:"
+                                            FontSizeRotulo="12"
+                                            TextMask="None"
+                                            WaterMark=".dll"
+                                            VisibilityRotulo="visible"  
+                                            FontSize="12"
+                                            Width="175"
+                                            Margin="0 5 5 0"
+                                            Foreground="Black" />
+
+                                        <control:UCTextBoxRotulado
+                                            x:Name="tPorta" 
+                                            Rotulo="Porta:"
+                                            IsEnabled="False"
+                                            FontSizeRotulo="12"
+                                            TextMask="None"
+                                            WaterMark="123"
+                                            VisibilityRotulo="visible"  
+                                            FontSize="12"
+                                            Width="170"
+                                            Margin="0 5 0 0"
+                                            Foreground="Black" />
+
+                                        <CheckBox 
+                                            x:Name="checkComunicacaoSat" 
+                                            Content="Comunic. Direta"
+                                            FontWeight="Regular"
+                                            FontSize="13"
+                                            IsChecked="True"
+                                            HorizontalAlignment="Left"
+                                            Margin="0 15 5 0" Click="checkComunicacaoSat_Click"/>
+
+                                        <control:UCTextBoxRotulado
+                                            x:Name="tIpSat" 
+                                            Rotulo="Ip Integrador:"
+                                            FontSizeRotulo="12"
+                                            IsEnabled="False"
+                                            TextMask="None"
+                                            WaterMark="000.000.000.000"
+                                            VisibilityRotulo="visible"  
+                                            FontSize="12"
+                                            Width="230"
+                                            Margin="0 5 0 0"
+                                            Foreground="Black" />
+
+                                        <control:UCTextBoxRotulado
+                                            x:Name="tAssinatura" 
+                                            Rotulo="Assinatura:"
+                                            FontSizeRotulo="12"
+                                            TextMask="None"
+                                            WaterMark=""
+                                            VisibilityRotulo="visible"  
+                                            MultiLine="True"
+                                            FontSize="12"
+                                            Width="350"
+                                            Height="140"
+                                            Margin="0 5 0 0"
+                                            Foreground="Black" />
+
+                                    </WrapPanel>
+                                </ScrollViewer>
+
+                            </TabItem>
+
+                            <TabItem Header="Permissões"
+                                FontSize="14"
+                                Style="{StaticResource bsTabItem}">
+
+                                <ScrollViewer>
+                                    <WrapPanel Width="350"
+                                        Margin="20 20 20 20">
+
+                                        <Grid Margin="0,5,0,2">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="180"/>
+                                                <ColumnDefinition Width="auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Label Grid.Column="0"
+                                                Content="Venda Direta Controlado:"
+                                                Padding="0"
+                                                Margin="0,0,0,2"
+                                                FontSize="12"
+                                                FontFamily="Arial"
+                                                FontWeight="Bold"
+                                                Foreground="Black"
+                                                HorizontalAlignment="Right"/>
+                                            <CheckBox 
+                                                Grid.Column="1"
+                                                x:Name="checkHabilitarControlado" 
+                                                Content="Habilitar"
+                                                FontWeight="Regular"
+                                                FontSize="13"
+                                                HorizontalAlignment="Left"
+                                                Margin="0 -3 0 0"/>
+                                        </Grid>
+
+                                        <Grid Margin="0,5,0,2">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="180"/>
+                                                <ColumnDefinition Width="auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Label Grid.Column="0"
+                                                Content="Consulta por Descrição:"
+                                                Padding="0"
+                                                Margin="0,0,0,2"
+                                                FontSize="12"
+                                                FontFamily="Arial"
+                                                FontWeight="Bold"
+                                                Foreground="Black"
+                                                HorizontalAlignment="Right"/>
+                                            <CheckBox 
+                                                Grid.Column="1"
+                                                x:Name="checkHabilitarConsultaDescricao" 
+                                                Content="Habilitar"
+                                                FontWeight="Regular"
+                                                FontSize="13"
+                                                HorizontalAlignment="Left"
+                                                Margin="0 -3 0 0"/>
+                                        </Grid>
+
+                                        <Grid Margin="0,5,0,2">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="180"/>
+                                                <ColumnDefinition Width="auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Label Grid.Column="0"
+                                                Content="Consulta de Produtos:"
+                                                Padding="0"
+                                                Margin="0,0,0,2"
+                                                FontSize="12"
+                                                FontFamily="Arial"
+                                                FontWeight="Bold"
+                                                Foreground="Black"
+                                                HorizontalAlignment="Right"/>
+                                            <CheckBox 
+                                                Grid.Column="1"
+                                                x:Name="checkHabilitarConsultaProduto" 
+                                                Content="Habilitar"
+                                                FontWeight="Regular"
+                                                FontSize="13"
+                                                HorizontalAlignment="Left"
+                                                Margin="0 -3 0 0"/>
+                                        </Grid>
+
+                                        <Grid Margin="0,5,0,2">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="180"/>
+                                                <ColumnDefinition Width="auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Label Grid.Column="0"
+                                                Content="Trava Prevenda Sem romaneio:"
+                                                Padding="0"
+                                                Margin="0,2,0,2"
+                                                FontSize="12"
+                                                FontFamily="Arial"
+                                                FontWeight="Bold"
+                                                Foreground="Black"
+                                                HorizontalAlignment="Right"/>
+                                            <CheckBox 
+                                                Grid.Column="1"
+                                                x:Name="checkTravaPrevendaSemRomaneio" 
+                                                Content="Habilitar"
+                                                FontWeight="Regular"
+                                                FontSize="13"
+                                                IsChecked="True"
+                                                IsEnabled="False"
+                                                HorizontalAlignment="Left"
+                                                Margin="0 -3 0 0"/>
+
+                                            <control:UCTextBoxRotulado
+                                                Grid.Column="1"
+                                                x:Name="tDiasFechamentoSemRomaneio" 
+                                                Rotulo="Dias"
+                                                Text="1"
+                                                FontSizeRotulo="12"
+                                                IsEnabled="False"
+                                                TextMask="None"
+                                                WaterMark="Dias Fech. S/ Romaneio"
+                                                VisibilityRotulo="hidden"  
+                                                FontSize="12"
+                                                Width="50"
+                                                Margin="80 0 0 0"
+                                                Foreground="Black" />
+
+                                        </Grid>
+
+                                        <Grid Margin="0,5,0,2">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="180"/>
+                                                <ColumnDefinition Width="auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Label Grid.Column="0"
+                                                Content="Biometria:"
+                                                Padding="0"
+                                                Margin="0,0,0,2"
+                                                FontSize="12"
+                                                FontFamily="Arial"
+                                                FontWeight="Bold"
+                                                Foreground="Black"
+                                                HorizontalAlignment="Right"/>
+                                            <CheckBox 
+                                                Grid.Column="1"
+                                                x:Name="checkHabilitarBiometria" 
+                                                Content="Habilitar"
+                                                FontWeight="Regular"
+                                                FontSize="13"
+                                                HorizontalAlignment="Left"
+                                                Margin="0 -3 0 0"/>
+                                        </Grid>
+
+                                        <Grid Margin="0,5,0,2">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="180"/>
+                                                <ColumnDefinition Width="auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Label Grid.Column="0"
+                                                Content="Dias Reag. S/ romaneio:"
+                                                Padding="0"
+                                                Margin="0 5 0 2"
+                                                FontSize="12"
+                                                FontFamily="Arial"
+                                                FontWeight="Bold"
+                                                Foreground="Black"
+                                                HorizontalAlignment="Right"/>
+
+                                            <control:UCTextBoxRotulado
+                                                Grid.Column="1"
+                                                x:Name="tDiasReagendamentoSemRomaneio" 
+                                                Rotulo="Dias"
+                                                Text="1"
+                                                IsEnabled="False"
+                                                FontSizeRotulo="12"
+                                                TextMask="None"
+                                                WaterMark="Dias Fech. S/ Romaneio"
+                                                VisibilityRotulo="hidden"  
+                                                FontSize="12"
+                                                Width="50"
+                                                Margin="3 0 0 0"
+                                                Foreground="Black" />
+
+                                        </Grid>
+
+                                        <Grid Margin="0,5,0,2">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="180"/>
+                                                <ColumnDefinition Width="auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Label Grid.Column="0"
+                                                Content="Add Cliente Livremente:"
+                                                Padding="0"
+                                                Margin="0,0,0,2"
+                                                FontSize="12"
+                                                FontFamily="Arial"
+                                                FontWeight="Bold"
+                                                Foreground="Black"
+                                                HorizontalAlignment="Right"/>
+                                            <CheckBox 
+                                                Grid.Column="1"
+                                                x:Name="checkAddClienteLivremente" 
+                                                Content="Habilitar"
+                                                FontWeight="Regular"
+                                                FontSize="13"
+                                                HorizontalAlignment="Left"
+                                                Margin="0 -3 0 0"/>
+                                        </Grid>
+
+                                        <Grid Margin="0,5,0,2">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="180"/>
+                                                <ColumnDefinition Width="auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Label Grid.Column="0"
+                                                Content="Qtd vias Sangrias:"
+                                                Padding="0"
+                                                Margin="0 5 0 2"
+                                                FontSize="12"
+                                                FontFamily="Arial"
+                                                FontWeight="Bold"
+                                                Foreground="Black"
+                                                HorizontalAlignment="Right"/>
+
+                                            <control:UCTextBoxRotulado
+                                                Grid.Column="1"
+                                                x:Name="tQtdViasSangrias" 
+                                                Rotulo="Dias"
+                                                Text="1"
+                                                IsEnabled="False"
+                                                FontSizeRotulo="12"
+                                                TextMask="None"
+                                                WaterMark="Dias Fech. S/ Romaneio"
+                                                VisibilityRotulo="hidden"  
+                                                FontSize="12"
+                                                Width="50"
+                                                Margin="3 0 0 0"
+                                                Foreground="Black" />
+
+                                        </Grid>
+
+                                        <Grid Margin="0,5,0,2">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="180"/>
+                                                <ColumnDefinition Width="auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Label Grid.Column="0"
+                                                Content="Qtd Romaneios pendentes:"
+                                                Padding="0"
+                                                Margin="0 5 0 2"
+                                                FontSize="12"
+                                                FontFamily="Arial"
+                                                FontWeight="Bold"
+                                                Foreground="Black"
+                                                HorizontalAlignment="Right"/>
+
+                                            <control:UCTextBoxRotulado
+                                                Grid.Column="1"
+                                                x:Name="tQtdRomaneiosPendentes" 
+                                                Rotulo="Dias"
+                                                Text="1"
+                                                IsEnabled="False"
+                                                FontSizeRotulo="12"
+                                                TextMask="None"
+                                                WaterMark="Dias Fech. S/ Romaneio"
+                                                VisibilityRotulo="hidden"  
+                                                FontSize="12"
+                                                Width="50"
+                                                Margin="3 0 0 0"
+                                                Foreground="Black" />
+
+                                        </Grid>
+
+                                        <Grid Margin="0,5,0,2">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="180"/>
+                                                <ColumnDefinition Width="auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Label Grid.Column="0"
+                                                Content="Limite Suprimentos:"
+                                                Padding="0"
+                                                Margin="0 5 0 2"
+                                                FontSize="12"
+                                                FontFamily="Arial"
+                                                FontWeight="Bold"
+                                                Foreground="Black"
+                                                HorizontalAlignment="Right"/>
+
+                                            <control:UCTextBoxRotulado
+                                                Grid.Column="1"
+                                                x:Name="tLimitesSuprimentos" 
+                                                Rotulo="Dias"
+                                                Text="300.00"
+                                                IsEnabled="False"
+                                                FontSizeRotulo="12"
+                                                TextMask="None"
+                                                WaterMark="Dias Fech. S/ Romaneio"
+                                                VisibilityRotulo="hidden"  
+                                                FontSize="12"
+                                                Width="50"
+                                                Margin="3 0 0 0"
+                                                Foreground="Black" />
+
+                                        </Grid>
+
+                                        <Grid Margin="0,5,0,2">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="180"/>
+                                                <ColumnDefinition Width="auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Label Grid.Column="0"
+                                                Content="Solicitar senha Reimp. Tef:"
+                                                Padding="0"
+                                                Margin="0,0,0,2"
+                                                FontSize="12"
+                                                FontFamily="Arial"
+                                                FontWeight="Bold"
+                                                Foreground="Black"
+                                                HorizontalAlignment="Right"/>
+                                            <CheckBox 
+                                                Grid.Column="1"
+                                                x:Name="checkSolicitarSenhaReimpressaoTef" 
+                                                Content="Habilitar"
+                                                FontWeight="Regular"
+                                                IsChecked="True"
+                                                IsEnabled="False"
+                                                FontSize="13"
+                                                HorizontalAlignment="Left"
+                                                Margin="0 -3 0 0"/>
+                                        </Grid>
+
+                                    </WrapPanel>
+                                </ScrollViewer>
+
+                            </TabItem>
+                            
+                        </TabControl>
+
+                        <Grid Grid.Row="1"
+                            Background="WhiteSmoke">
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <control:UCButton Grid.Column="1"
+                                x:Name="btnSalvar"
+                                Text="Salvar"
+                                IsEnabled="True"
+                                Width="100"
+                                TextColor="White"
+                                BorderColor="Black"
+                                ButtonColor="#0067c0"
+                                HorizontalAlignment="Right"
+                                Margin="0 0 20 0" Click="btnSalvar_Click"/>
+
+                        </Grid>
+
+                    </Grid>
+                </TabItem>
+
+                <TabItem Header="Configurações"
+                    FontSize="14"
+                    Visibility="Collapsed"
+                    Style="{StaticResource bsTabItem}" Cursor="Arrow">
+
+                    <ScrollViewer>
+                        <StackPanel Width="350"
+                                    Margin="40 20 20 20"
+                                    Orientation="Vertical">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="1*"/>
+                                    <ColumnDefinition Width="auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <Label Grid.Column="0"
+                                    Content="Configurações"
+                                    Padding="0"
+                                       FontSize="20"
+                                    HorizontalAlignment="Left"/>
+
+                                <Button Grid.Column="1"
+                                    Width="110" Click="Button_Click">
+                                    <StackPanel Orientation="Horizontal">
+                                        <Label Content="Retornar"
+                                               Padding="0"
+                                               Foreground="White"
+                                               Margin="0 0 5 0"/>
+                                        <materialDesign:PackIcon 
+                                            Kind="ArrowLeftBottomBold"
+                                            HorizontalAlignment="Right"
+                                            Margin="0 3 0 0"/>
+                                    </StackPanel>
+                                    
+                                </Button>
+                                
+                            </Grid>
+                            
+                            <Grid Margin="0,5,0,2">
+                                
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="277*"/>
+                                    <!--<ColumnDefinition Width="253*"/>-->
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <Label Grid.Row="0"
+                                           Content="Truncate:"
+                                           Height="17"
+                                           Padding="0"
+                                           FontSize="12"/>
+                                <TextBox  Grid.Row="1"
+                                    Name="tQuery" 
+                                    Text=""
+                                    Width="350"  
+                                    Height="410"
+                                    FontSize="10"
+                                    Foreground="Black" 
+                                    BorderBrush="Black" 
+                                    BorderThickness="0.5" 
+                                    CharacterCasing="Upper"
+                                    AcceptsReturn="True"
+                                    AcceptsTab="True"
+                                    IsEnabled="False"
+                                    TextWrapping="Wrap"
+                                    Cursor="Arrow"/>
+                            </Grid>
+                            <StackPanel Orientation="Horizontal"
+                                        Margin="0 10 0 0">
+
+                                <control:UCButton
+                                    x:Name="btnEditarTruncate"
+                                    Text=""
+                                    IsEnabled="True"
+                                    Width="30"
+                                    HorizontalAlignment="Center"
+                                    Margin="0"
+                                    IconVisibility="Visible"
+                                    IconColor="White"
+                                    Icon="Edit"
+                                    TextColor="White"
+                                    BorderColor="Black"
+                                    ButtonColor="IndianRed"
+                                    Click="btnEditarTruncate_Click"/>
+
+                                <control:UCButton
+                                    x:Name="btnSalvarTruncate"
+                                    Text=""
+                                    IsEnabled="True"
+                                    Width="30"
+                                    HorizontalAlignment="Center"
+                                    Margin="0"
+                                    IconVisibility="Visible"
+                                    IconColor="White"
+                                    Icon="ContentSaveSettings"
+                                    TextColor="White"
+                                    BorderColor="Black"
+                                    ButtonColor="MediumSeaGreen"
+                                    Click="btnSalvarTruncate_Click"/>
+                                
+                            </StackPanel>
+                        </StackPanel>
+                    </ScrollViewer>
+                </TabItem>
+
+            </TabControl>
+        </Grid>
+
+
+    </Grid>
+</Window>
